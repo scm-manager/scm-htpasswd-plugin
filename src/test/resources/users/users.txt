@@ -1,0 +1,6 @@
+#user;pwd;email;displayname;groups
+trillian;trilli123;tricia.mcmillan@hitchhiker.com;Tricia McMillan;HeartOfGold,RestaurantAtTheEndOfTheUniverse,HappyVerticalPeopleTransporter
+prefect;prefi123;ford.prefect;Ford Prefect;
+zaphod;zaphod123;zaphod.beeblebrox@hitchhiker.com;;
+dephn;deohn123;dephn@hitchhiker.com;Dephn Xing;HeartOfGold
+arthur;dent123;;Arthur Dent;HeartOfGold,RestaurantsAtEarth

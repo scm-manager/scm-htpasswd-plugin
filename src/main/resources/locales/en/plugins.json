@@ -1,0 +1,48 @@
+{
+  "scm-htpasswd-plugin": {
+    "nav-link": "htpasswd",
+    "form": {
+      "header": "htpasswd Configuration",
+      "htpasswdFilepath": ".htpasswd File path",
+      "htpasswdFilepathHelp": "The path for the .htpasswd file (users/passwords). For example: /etc/scm/.htpasswd",
+      "htgroupFilepath": ".htgroup File path",
+      "htgroupFilepathHelp": "The path for the .htgroup file (groups/users). For example: /etc/scm/.htgroup",
+      "htmetaFilepath": ".htmeta File path",
+      "htmetaFilepathHelp": "The path for the .htmeta file (users/metadata: email, display-name). For example: /etc/scm/.htmeta",
+      "enabled": "Enabled",
+      "enabledHelp": "Enables or disables the htpasswd authentication.",
+      "testButton": "Test Authentication"
+    },
+    "testForm": {
+      "title": "htpasswd Authentication Test",
+      "username": "Username",
+      "password": "Password",
+      "submit": "Test",
+      "abort": "Cancel",
+      "result": {
+        "header": "Test Result",
+        "configured": "Configuration",
+        "userFound": "Search user",
+        "userAuthenticated": "Authenticate user",
+        "userValid": "Returned user is valid",
+        "userDetails": "User",
+        "userDetailsName": "Name",
+        "userDetailsDisplayName": "Display Name",
+        "userDetailsMail": "Mail",
+        "missingValidMail": "<missing valid mail>",
+        "groups": "Groups",
+        "exception": "Exception"
+      }
+    }
+  },
+  "permissions": {
+    "configuration": {
+      "read,write": {
+        "htpasswd": {
+          "displayName": "Modify htpasswd configuration",
+          "description": "May modify the htpasswd configuration"
+        }
+      }
+    }
+  }
+}
