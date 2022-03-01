@@ -33,7 +33,7 @@
     </encoder>
   </appender>
 
-  <logger name="sonia.scm.auth.htpasswd" level="TRACE" />
+  <logger name="org.javastack.scm.auth.htpasswd" level="TRACE" />
   <logger name="sonia.scm.cache" level="DEBUG" />
 
   <root level="WARN">

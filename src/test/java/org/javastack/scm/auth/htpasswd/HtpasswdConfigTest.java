@@ -21,31 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package org.javastack.scm.auth.htpasswd;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-plugins {
-  id 'org.scm-manager.smp' version '0.8.3'
-}
+import org.javastack.scm.auth.htpasswd.HtpasswdConfig;
 
-dependencies {
-  implementation "commons-codec:commons-codec:1.15"
-  testImplementation "com.github.sdorra:shiro-unit:1.0.1"
-}
+//~--- non-JDK imports --------------------------------------------------------
 
-scmPlugin {
-  scmVersion = "2.14.0"
-  displayName = "htpasswd"
-  description = "Authentication for SCM-Manager using htpasswd"
-  author = "Guillermo Grandes"
-  category = "Authentication"
+import org.junit.Test;
 
-  run {
-    loggingConfiguration = "src/main/conf/logging.xml"
-  }
-
-  openapi {
-    packages = [
-      "org.javastack.scm.auth.htpasswd.resource",
-    ]
+public class HtpasswdConfigTest {
+  @Test
+  public void testIsValid() {
+    HtpasswdConfig config = new HtpasswdConfig();
+    config.setHtpasswdFilepath(".htpasswd");
+    config.setHtgroupFilepath(".htgroup");
+    config.setHtmetaFilepath(".htmail");
+    assertTrue(config.isValid());
+    config.setHtpasswdFilepath(null);
+    assertFalse(config.isValid());
+    config.setHtpasswdFilepath("");
+    assertFalse(config.isValid());
   }
 }

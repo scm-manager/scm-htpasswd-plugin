@@ -21,31 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package org.javastack.scm.auth.htpasswd;
 
+import javax.inject.Inject;
+import javax.inject.Provider;
+import javax.inject.Singleton;
 
-plugins {
-  id 'org.scm-manager.smp' version '0.8.3'
-}
+import com.google.common.annotations.VisibleForTesting;
 
-dependencies {
-  implementation "commons-codec:commons-codec:1.15"
-  testImplementation "com.github.sdorra:shiro-unit:1.0.1"
-}
+import sonia.scm.store.ConfigurationStore;
+import sonia.scm.store.ConfigurationStoreFactory;
 
-scmPlugin {
-  scmVersion = "2.14.0"
-  displayName = "htpasswd"
-  description = "Authentication for SCM-Manager using htpasswd"
-  author = "Guillermo Grandes"
-  category = "Authentication"
+@Singleton
+public class HtpasswdConfigStore implements Provider<HtpasswdConfig> {
+  private final ConfigurationStore<HtpasswdConfig> configurationStore;
 
-  run {
-    loggingConfiguration = "src/main/conf/logging.xml"
+  @Inject
+  public HtpasswdConfigStore(ConfigurationStoreFactory configurationStoreFactory) {
+    this(configurationStoreFactory.withType(HtpasswdConfig.class).withName("htpasswd").build());
   }
 
-  openapi {
-    packages = [
-      "org.javastack.scm.auth.htpasswd.resource",
-    ]
+  @VisibleForTesting
+  HtpasswdConfigStore(ConfigurationStore<HtpasswdConfig> configurationStore) {
+    this.configurationStore = configurationStore;
+  }
+
+  public HtpasswdConfig get() {
+    return configurationStore.getOptional().orElse(new HtpasswdConfig());
+  }
+
+  public void set(HtpasswdConfig config) {
+    configurationStore.set(config);
   }
 }

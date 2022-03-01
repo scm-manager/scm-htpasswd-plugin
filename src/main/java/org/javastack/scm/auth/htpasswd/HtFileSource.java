@@ -21,31 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package org.javastack.scm.auth.htpasswd;
 
-
-plugins {
-  id 'org.scm-manager.smp' version '0.8.3'
-}
-
-dependencies {
-  implementation "commons-codec:commons-codec:1.15"
-  testImplementation "com.github.sdorra:shiro-unit:1.0.1"
-}
-
-scmPlugin {
-  scmVersion = "2.14.0"
-  displayName = "htpasswd"
-  description = "Authentication for SCM-Manager using htpasswd"
-  author = "Guillermo Grandes"
-  category = "Authentication"
-
-  run {
-    loggingConfiguration = "src/main/conf/logging.xml"
+class HtFileSource {
+  String[] splitKeyData(final String in) {
+    final int offset = in.indexOf(":");
+    if (offset < 0) {
+      return null;
+    }
+    return new String[] {
+        in.substring(0, offset), in.substring(offset + 1)
+    };
   }
 
-  openapi {
-    packages = [
-      "org.javastack.scm.auth.htpasswd.resource",
-    ]
+  // only safe chars: [0-9a-zA-Z]
+  String cleanName(final String in) {
+    final StringBuilder sb = new StringBuilder(in.length());
+    for (int j = 0; j < in.length(); j++) {
+      final char c = in.charAt(j);
+      if ((c >= '0') && (c <= '9')) {
+        sb.append(c);
+      } else if ((c >= 'a') && (c <= 'z')) {
+        sb.append(c);
+      } else if ((c >= 'A') && (c <= 'Z')) {
+        sb.append(c);
+      }
+    }
+    return (in.length() == sb.length() ? in : sb.toString());
   }
 }

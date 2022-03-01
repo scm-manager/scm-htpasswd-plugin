@@ -21,31 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package org.javastack.scm.auth.htpasswd.resource;
 
+import org.hibernate.validator.constraints.NotEmpty;
 
-plugins {
-  id 'org.scm-manager.smp' version '0.8.3'
-}
+import de.otto.edison.hal.HalRepresentation;
+import de.otto.edison.hal.Links;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-dependencies {
-  implementation "commons-codec:commons-codec:1.15"
-  testImplementation "com.github.sdorra:shiro-unit:1.0.1"
-}
+@Getter
+@Setter
+@NoArgsConstructor
+@SuppressWarnings("squid:S2160") // No need for equals and hash code here, never compared, never hashed
+public class HtpasswdConfigDto extends HalRepresentation {
+  private boolean enabled;
+  @NotEmpty
+  private String htpasswdFilepath;
+  @NotEmpty
+  private String htgroupFilepath;
+  @NotEmpty
+  private String htmetaFilepath;
 
-scmPlugin {
-  scmVersion = "2.14.0"
-  displayName = "htpasswd"
-  description = "Authentication for SCM-Manager using htpasswd"
-  author = "Guillermo Grandes"
-  category = "Authentication"
-
-  run {
-    loggingConfiguration = "src/main/conf/logging.xml"
-  }
-
-  openapi {
-    packages = [
-      "org.javastack.scm.auth.htpasswd.resource",
-    ]
+  public HtpasswdConfigDto(Links links) {
+    super(links);
   }
 }

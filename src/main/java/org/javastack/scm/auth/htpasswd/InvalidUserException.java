@@ -21,31 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package org.javastack.scm.auth.htpasswd;
 
+import sonia.scm.user.User;
 
-plugins {
-  id 'org.scm-manager.smp' version '0.8.3'
-}
+@SuppressWarnings("squid:MaximumInheritanceDepth")
+public class InvalidUserException extends HtpasswdException {
+  private final User invalidUser;
 
-dependencies {
-  implementation "commons-codec:commons-codec:1.15"
-  testImplementation "com.github.sdorra:shiro-unit:1.0.1"
-}
-
-scmPlugin {
-  scmVersion = "2.14.0"
-  displayName = "htpasswd"
-  description = "Authentication for SCM-Manager using htpasswd"
-  author = "Guillermo Grandes"
-  category = "Authentication"
-
-  run {
-    loggingConfiguration = "src/main/conf/logging.xml"
+  public InvalidUserException(String message, User invalidUser) {
+    super(message);
+    this.invalidUser = invalidUser;
   }
 
-  openapi {
-    packages = [
-      "org.javastack.scm.auth.htpasswd.resource",
-    ]
+  public User getInvalidUser() {
+    return invalidUser;
   }
 }

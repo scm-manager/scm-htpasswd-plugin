@@ -21,31 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package org.javastack.scm.auth.htpasswd.resource;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.Set;
 
-plugins {
-  id 'org.scm-manager.smp' version '0.8.3'
-}
+import sonia.scm.user.User;
 
-dependencies {
-  implementation "commons-codec:commons-codec:1.15"
-  testImplementation "com.github.sdorra:shiro-unit:1.0.1"
-}
+class AuthenticationResult {
+  private final AuthenticationFailure failure;
+  private final Collection<String> groups;
+  private final User user;
 
-scmPlugin {
-  scmVersion = "2.14.0"
-  displayName = "htpasswd"
-  description = "Authentication for SCM-Manager using htpasswd"
-  author = "Guillermo Grandes"
-  category = "Authentication"
-
-  run {
-    loggingConfiguration = "src/main/conf/logging.xml"
+  AuthenticationResult(User user, Set<String> groups) {
+    this.failure = null;
+    this.user = user;
+    this.groups = groups;
   }
 
-  openapi {
-    packages = [
-      "org.javastack.scm.auth.htpasswd.resource",
-    ]
+  AuthenticationResult(AuthenticationFailure failure, User user) {
+    this.failure = failure;
+    this.user = user;
+    this.groups = Collections.emptyList();
+  }
+
+  AuthenticationResult(AuthenticationFailure failure) {
+    this.failure = failure;
+    this.user = null;
+    this.groups = Collections.emptyList();
+  }
+
+  public Collection<String> getGroups() {
+    return groups;
+  }
+
+  public Optional<AuthenticationFailure> getFailure() {
+    return Optional.ofNullable(failure);
+  }
+
+  public Optional<User> getUser() {
+    return Optional.ofNullable(user);
   }
 }

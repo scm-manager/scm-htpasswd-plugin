@@ -21,31 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package org.javastack.scm.auth.htpasswd.resource;
 
+import org.mapstruct.factory.Mappers;
 
-plugins {
-  id 'org.scm-manager.smp' version '0.8.3'
-}
+import com.google.inject.AbstractModule;
 
-dependencies {
-  implementation "commons-codec:commons-codec:1.15"
-  testImplementation "com.github.sdorra:shiro-unit:1.0.1"
-}
+import sonia.scm.plugin.Extension;
 
-scmPlugin {
-  scmVersion = "2.14.0"
-  displayName = "htpasswd"
-  description = "Authentication for SCM-Manager using htpasswd"
-  author = "Guillermo Grandes"
-  category = "Authentication"
+@Extension
+public class HtpasswdModule extends AbstractModule {
+  public static final String PERMISSION_NAME = "htpasswd";
 
-  run {
-    loggingConfiguration = "src/main/conf/logging.xml"
-  }
-
-  openapi {
-    packages = [
-      "org.javastack.scm.auth.htpasswd.resource",
-    ]
+  @Override
+  protected void configure() {
+    bind(HtpasswdConfigMapper.class).to(Mappers.getMapper(HtpasswdConfigMapper.class).getClass());
   }
 }
