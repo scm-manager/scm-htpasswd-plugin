@@ -27,13 +27,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.PrintWriter;
-import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
 import org.apache.commons.codec.digest.Md5Crypt;
-import org.javastack.scm.auth.htpasswd.HtpasswdAuthenticator;
-import org.javastack.scm.auth.htpasswd.HtpasswdConfig;
-import org.javastack.scm.auth.htpasswd.UserAuthenticationFailedException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,12 +37,12 @@ import org.junit.jupiter.api.Test;
 import sonia.scm.user.User;
 
 class HtpasswdAuthenticatorTest extends HtpasswdTestBase {
-  private HtpasswdConfig config;
   private HtpasswdAuthenticator authenticator;
 
   @BeforeEach
-  void setUpAuthenticator() throws NoSuchAlgorithmException {
-    config = createConfig();
+  void setUpAuthenticator() {
+    this.setup();
+    HtpasswdConfig config = createConfigWithFiles();
     authenticator = new HtpasswdAuthenticator(config);
   }
 

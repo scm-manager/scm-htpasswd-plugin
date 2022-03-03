@@ -40,6 +40,7 @@ class HtpasswdGroupResolverTest extends HtpasswdTestBase {
 
   @BeforeEach
   void setUpAuthenticator() {
+    this.setup();
     config = createConfig();
     HtpasswdConfigStore htpasswdConfigStore = new HtpasswdConfigStore(new InMemoryConfigurationStore<>());
     htpasswdConfigStore.set(config);

@@ -23,6 +23,18 @@
  */
 package org.javastack.scm.auth.htpasswd;
 
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import sonia.scm.security.SyncingRealmHelper;
+import sonia.scm.user.User;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -31,25 +43,6 @@ import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import java.security.NoSuchAlgorithmException;
-
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.javastack.scm.auth.htpasswd.HtpasswdConfig;
-import org.javastack.scm.auth.htpasswd.HtpasswdConfigStore;
-import org.javastack.scm.auth.htpasswd.HtpasswdRealm;
-import org.javastack.scm.auth.htpasswd.UserAuthenticationFailedException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import sonia.scm.security.SyncingRealmHelper;
-import sonia.scm.user.User;
 
 @ExtendWith(MockitoExtension.class)
 class HtpasswdRealmTest extends HtpasswdTestBase {
@@ -62,8 +55,9 @@ class HtpasswdRealmTest extends HtpasswdTestBase {
 
   @BeforeEach
   @SuppressWarnings("unchecked")
-  void setUpRealm() throws NoSuchAlgorithmException {
-    config = createConfig();
+  void setUpRealm() {
+    this.setup();
+    config = createConfigWithFiles();
     lenient().when(configStore.get()).thenReturn(config);
     realm = new HtpasswdRealm(configStore, syncingRealmHelper);
   }
