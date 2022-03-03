@@ -23,28 +23,23 @@
  */
 package org.javastack.scm.auth.htpasswd;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
-import java.security.NoSuchAlgorithmException;
-import java.util.Set;
-
-import org.javastack.scm.auth.htpasswd.HtpasswdConfig;
-import org.javastack.scm.auth.htpasswd.HtpasswdConfigStore;
-import org.javastack.scm.auth.htpasswd.HtpasswdGroupResolver;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import sonia.scm.store.InMemoryConfigurationStore;
+
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
+import java.util.Set;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class HtpasswdGroupResolverTest extends HtpasswdTestBase {
   private HtpasswdConfig config;
   private HtpasswdGroupResolver groupResolver;
 
   @BeforeEach
-  void setUpAuthenticator() throws NoSuchAlgorithmException {
+  void setUpAuthenticator() {
     config = createConfig();
     HtpasswdConfigStore htpasswdConfigStore = new HtpasswdConfigStore(new InMemoryConfigurationStore<>());
     htpasswdConfigStore.set(config);
@@ -94,6 +89,6 @@ class HtpasswdGroupResolverTest extends HtpasswdTestBase {
     } catch (Exception ex) {
       Assertions.fail("failed to write group data file: " + HTGROUP, ex);
     }
-    assertThat(groupResolver.resolve("dephn")).containsOnly("HeartOfGold", "test");
+    assertThat(groupResolver.resolve("dephn")).containsExactlyInAnyOrder("HeartOfGold", "test");
   }
 }
