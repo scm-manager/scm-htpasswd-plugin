@@ -28,6 +28,7 @@ import static de.otto.edison.hal.Links.linkingTo;
 import static org.javastack.scm.auth.htpasswd.resource.HtpasswdModule.PERMISSION_NAME;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import org.javastack.scm.auth.htpasswd.HtpasswdConfig;
 import org.mapstruct.Context;
@@ -43,7 +44,7 @@ import sonia.scm.config.ConfigurationPermissions;
 @Mapper
 public abstract class HtpasswdConfigMapper {
   @Inject
-  private ScmPathInfoStore scmPathInfoStore;
+  private Provider<ScmPathInfoStore> scmPathInfoStore;
 
   @Mapping(ignore = true, target = "attributes")
   public abstract HtpasswdConfigDto map(HtpasswdConfig config);
@@ -61,17 +62,17 @@ public abstract class HtpasswdConfigMapper {
   }
 
   private String self() {
-    LinkBuilder linkBuilder = new LinkBuilder(scmPathInfoStore.get(), HtpasswdConfigResource.class);
+    LinkBuilder linkBuilder = new LinkBuilder(scmPathInfoStore.get().get(), HtpasswdConfigResource.class);
     return linkBuilder.method("getConfig").parameters().href();
   }
 
   private String update() {
-    LinkBuilder linkBuilder = new LinkBuilder(scmPathInfoStore.get(), HtpasswdConfigResource.class);
+    LinkBuilder linkBuilder = new LinkBuilder(scmPathInfoStore.get().get(), HtpasswdConfigResource.class);
     return linkBuilder.method("setConfig").parameters().href();
   }
 
   private String test() {
-    LinkBuilder linkBuilder = new LinkBuilder(scmPathInfoStore.get(), HtpasswdConfigResource.class);
+    LinkBuilder linkBuilder = new LinkBuilder(scmPathInfoStore.get().get(), HtpasswdConfigResource.class);
     return linkBuilder.method("testConfig").parameters().href();
   }
 }

@@ -34,6 +34,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collections;
 
+import javax.inject.Provider;
 import javax.ws.rs.core.MediaType;
 
 import org.assertj.core.api.Assertions;
@@ -74,7 +75,7 @@ public class HtpasswdConfigResourceTest {
   @Mock
   private HtpasswdConfigStore configStore;
   @Mock
-  private ScmPathInfoStore scmPathInfoStore;
+  private Provider<ScmPathInfoStore> scmPathInfoStore;
 
   @Mock
   private HtpasswdAuthTester authTester;
@@ -95,8 +96,9 @@ public class HtpasswdConfigResourceTest {
 
     dispatcher = new RestDispatcher();
     dispatcher.addSingletonResource(resource);
-
-    when(scmPathInfoStore.get()).thenReturn(() -> URI.create("/"));
+    ScmPathInfoStore scmPathInfoStore = new ScmPathInfoStore();
+    scmPathInfoStore.set(() -> URI.create("/"));
+    when(this.scmPathInfoStore.get()).thenReturn(scmPathInfoStore);
   }
 
   @Test
