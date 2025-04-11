@@ -15,24 +15,22 @@
  */
 
 import React from "react";
-import { Title, Configuration } from "@scm-manager/ui-components";
+import { Configuration } from "@scm-manager/ui-components";
 import HtpasswdConfigurationForm from "./HtpasswdConfigurationForm";
-import { withTranslation, WithTranslation } from "react-i18next";
+import {useTranslation, WithTranslation} from "react-i18next";
+import { useDocumentTitle, Title } from "@scm-manager/ui-core";
 
 type Props = WithTranslation & {
   link: string;
 };
 
-class HtpasswdConfiguration extends React.Component<Props> {
-  render(): React.ReactNode {
-    const { t, link } = this.props;
-    return (
-      <>
-        <Title title={t("scm-htpasswd-plugin.form.header")} />
-        <Configuration link={link} t={t} render={props => <HtpasswdConfigurationForm {...props} />} />
-      </>
-    );
-  }
+export default function HtpasswdConfiguration({link}: Props) {
+  const [t] = useTranslation("plugins");
+  useDocumentTitle(t("scm-htpasswd-plugin.form.header"))
+  return (
+    <>
+      <Title title={t("scm-htpasswd-plugin.form.header")} />
+      <Configuration link={link} t={t} render={props => <HtpasswdConfigurationForm {...props} t={t}/>} />
+    </>
+  );
 }
-
-export default withTranslation("plugins")(HtpasswdConfiguration);
