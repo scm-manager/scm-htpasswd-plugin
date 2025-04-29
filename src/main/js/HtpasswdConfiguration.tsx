@@ -14,23 +14,25 @@
  * along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-import React from "react";
+import React, { FC } from "react";
+import { useTranslation } from "react-i18next";
 import { Configuration } from "@scm-manager/ui-components";
+import { Title } from "@scm-manager/ui-core";
 import HtpasswdConfigurationForm from "./HtpasswdConfigurationForm";
-import {useTranslation, WithTranslation} from "react-i18next";
-import { useDocumentTitle, Title } from "@scm-manager/ui-core";
 
-type Props = WithTranslation & {
+type Props = {
   link: string;
 };
 
-export default function HtpasswdConfiguration({link}: Props) {
+const HtpasswdConfiguration: FC<Props> = ({ link }) => {
   const [t] = useTranslation("plugins");
-  useDocumentTitle(t("scm-htpasswd-plugin.form.header"))
+
   return (
     <>
       <Title title={t("scm-htpasswd-plugin.form.header")} />
-      <Configuration link={link} t={t} render={props => <HtpasswdConfigurationForm {...props} t={t}/>} />
+      <Configuration link={link} render={(props) => <HtpasswdConfigurationForm {...props} />} />
     </>
   );
-}
+};
+
+export default HtpasswdConfiguration;
