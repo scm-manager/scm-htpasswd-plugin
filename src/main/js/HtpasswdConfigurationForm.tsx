@@ -16,7 +16,7 @@
 
 import React from "react";
 import { Button, Checkbox, InputField, Select } from "@scm-manager/ui-components";
-import {TFunction} from "react-i18next";
+import { withTranslation, WithTranslation } from "react-i18next";
 import TestAuthenticationDialog from "./TestAuthenticationDialog";
 
 type HtpasswdConfiguration = {
@@ -26,11 +26,10 @@ type HtpasswdConfiguration = {
   enabled: boolean;
 };
 
-type Props = {
+type Props = WithTranslation & {
   initialConfiguration: HtpasswdConfiguration;
   readOnly: boolean;
   onConfigurationChange: (config: HtpasswdConfiguration, valid: boolean) => void;
-  t: TFunction<"plugins", undefined>;
 };
 
 type State = HtpasswdConfiguration & {
@@ -83,9 +82,7 @@ class HtpasswdConfigurationForm extends React.Component<Props, State> {
         {this.createInputField("htpasswdFilepath")}
         {this.createInputField("htgroupFilepath")}
         {this.createInputField("htmetaFilepath")}
-        <div className="column is-full">
-          {this.createCheckbox("enabled")}
-        </div>
+        <div className="column is-full">{this.createCheckbox("enabled")}</div>
         <div className="column is-full">
           <Button
             label={t("scm-htpasswd-plugin.form.testButton")}
@@ -173,4 +170,4 @@ class HtpasswdConfigurationForm extends React.Component<Props, State> {
   };
 }
 
-export default HtpasswdConfigurationForm;
+export default withTranslation("plugins")(HtpasswdConfigurationForm);
