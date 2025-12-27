@@ -1,26 +1,26 @@
 {
   "scm-htpasswd-plugin": {
-    "nav-link": "htpasswd",
+    "nav-link": "Htpasswd",
     "form": {
-      "header": "htpasswd Configuration",
-      "htpasswdFilepath": ".htpasswd File path",
-      "htpasswdFilepathHelp": "The path for the .htpasswd file (users/passwords). For example: /etc/scm/.htpasswd",
+      "header": "Htpasswd configuration",
+      "htpasswdFilepath": ".htpasswd file path",
+      "htpasswdFilepathHelp": "The path for the .htpasswd file (users/passwords). For example: “/etc/scm/.htpasswd”.",
       "htgroupFilepath": ".htgroup File path",
-      "htgroupFilepathHelp": "The path for the .htgroup file (groups/users). For example: /etc/scm/.htgroup",
+      "htgroupFilepathHelp": "The path for the .htgroup file (groups/users). For example: “/etc/scm/.htgroup”.",
       "htmetaFilepath": ".htmeta File path",
-      "htmetaFilepathHelp": "The path for the .htmeta file (users/metadata: email, display-name). For example: /etc/scm/.htmeta",
+      "htmetaFilepathHelp": "The path for the .htmeta file (users/metadata: email, display name). For example: “/etc/scm/.htmeta”.",
       "enabled": "Enabled",
       "enabledHelp": "Enables or disables the htpasswd authentication.",
-      "testButton": "Test Authentication"
+      "testButton": "Test authentication"
     },
     "testForm": {
-      "title": "htpasswd Authentication Test",
+      "title": "Htpasswd authentication test",
       "username": "Username",
       "password": "Password",
       "submit": "Test",
       "abort": "Cancel",
       "result": {
-        "header": "Test Result",
+        "header": "Test result",
         "configured": "Configuration",
         "userFound": "Search user",
         "userAuthenticated": "Authenticate user",
@@ -40,7 +40,7 @@
       "read,write": {
         "htpasswd": {
           "displayName": "Modify htpasswd configuration",
-          "description": "May modify the htpasswd configuration"
+          "description": "May modify the htpasswd configuration."
         }
       }
     }
