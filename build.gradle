@@ -19,8 +19,8 @@ plugins {
 }
 
 dependencies {
-  implementation "commons-codec:commons-codec:1.15"
-  testImplementation "com.github.sdorra:shiro-unit:1.0.1"
+  implementation "commons-codec:commons-codec:1.21.0"
+  testImplementation "com.github.sdorra:shiro-unit:1.0.2"
 }
 
 scmPlugin {
