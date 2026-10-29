@@ -2,7 +2,7 @@
   "scm-htpasswd-plugin": {
     "nav-link": "Htpasswd",
     "form": {
-      "header": "Htpasswd configuration",
+      "header": "Htpasswd Configuration",
       "htpasswdFilepath": ".htpasswd file path",
       "htpasswdFilepathHelp": "The path for the .htpasswd file (users/passwords). For example: “/etc/scm/.htpasswd”.",
       "htgroupFilepath": ".htgroup File path",
@@ -11,13 +11,13 @@
       "htmetaFilepathHelp": "The path for the .htmeta file (users/metadata: email, display name). For example: “/etc/scm/.htmeta”.",
       "enabled": "Enabled",
       "enabledHelp": "Enables or disables the htpasswd authentication.",
-      "testButton": "Test authentication"
+      "testButton": "Test Authentication"
     },
     "testForm": {
-      "title": "Htpasswd authentication test",
+      "title": "Htpasswd Authentication Test",
       "username": "Username",
       "password": "Password",
-      "submit": "Test",
+      "submit": "Test Authentication",
       "abort": "Cancel",
       "result": {
         "header": "Test result",

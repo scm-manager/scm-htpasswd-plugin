@@ -15,8 +15,8 @@
  */
 
 import React from "react";
-import { Button, Checkbox, InputField, Select } from "@scm-manager/ui-components";
 import { withTranslation, WithTranslation } from "react-i18next";
+import { Button, Checkbox, InputField, Select } from "@scm-manager/ui-components";
 import TestAuthenticationDialog from "./TestAuthenticationDialog";
 
 type HtpasswdConfiguration = {

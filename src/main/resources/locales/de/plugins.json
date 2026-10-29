@@ -17,7 +17,7 @@
       "title": "htpasswd-Authentifizierung testen",
       "username": "Benutzername",
       "password": "Passwort",
-      "submit": "Testen",
+      "submit": "Authentifizierung testen",
       "abort": "Abbrechen",
       "result": {
         "header": "Testergebnisse",

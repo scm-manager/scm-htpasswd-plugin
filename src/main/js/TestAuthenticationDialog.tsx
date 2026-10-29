@@ -14,9 +14,10 @@
  * along with this program. If not, see https://www.gnu.org/licenses/.
  */
 
-import React from "react";
-import { apiClient, Button, InputField, Modal, Subtitle, Tag } from "@scm-manager/ui-components";
-import { withTranslation, WithTranslation } from "react-i18next";
+import React, { FC, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { apiClient, InputField, Modal, Tag } from "@scm-manager/ui-components";
+import { Button, Subtitle } from "@scm-manager/ui-core";
 
 type TestResultUser = {
   valid: boolean;
@@ -26,193 +27,154 @@ type TestResultUser = {
 };
 
 type TestResult = {
-  configured: boolean;
-  userFound: boolean;
-  userAuthenticated: boolean;
-  exception: string;
-  user: TestResultUser;
-  groups: string[];
+  configured?: boolean;
+  userFound?: boolean;
+  userAuthenticated?: boolean;
+  exception?: string;
+  user?: TestResultUser;
+  groups?: string[];
 };
 
-type Props = WithTranslation & {
+type Props = {
   config: any;
   testLink: string;
-  onClose: () => any;
+  onClose: () => void;
 };
 
-type State = {
-  username: string;
-  password: string;
-  testResult?: TestResult;
-};
+const TestConnectionDialog: FC<Props> = ({ config, testLink, onClose }) => {
+  const { t } = useTranslation("plugins");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [testResult, setTestResult] = useState<TestResult | undefined>(undefined);
 
-class TestConnectionDialog extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
+  const onTest = () => {
+    apiClient
+      .post(testLink, {
+        username,
+        password,
+        config,
+      })
+      .then((result) => result.json())
+      .then((body) => setTestResult(body))
+      .catch((error) =>
+        setTestResult({
+          exception: error.message || "Unknown error",
+        }),
+      );
+  };
 
-    this.state = {
-      username: "",
-      password: "",
-      testResult: undefined
-    };
-  }
-
-  render() {
-    const { t, onClose } = this.props;
-    const { username, password } = this.state;
-    const valid = username !== "" && password !== "";
-
-    const body = (
-      <>
-        <div className="columns">
-          <div className="column">
-            <InputField
-              name="username"
-              label={t("scm-htpasswd-plugin.testForm.username")}
-              value={username}
-              onReturnPressed={this.onTest}
-              onChange={this.usernameChanged}
-            />
-          </div>
-          <div className="column">
-            <InputField
-              name="password"
-              label={t("scm-htpasswd-plugin.testForm.password")}
-              value={password}
-              type="password"
-              onReturnPressed={this.onTest}
-              onChange={this.passwordChanged}
-            />
-          </div>
-        </div>
-        {this.renderTestResult()}
-      </>
-    );
-    const footer = (
-      <>
-        <Button label={t("scm-htpasswd-plugin.testForm.submit")} disabled={!valid} action={this.onTest} color="primary" />
-        <Button label={t("scm-htpasswd-plugin.testForm.abort")} action={onClose} />
-      </>
-    );
-
-    return (
-      <Modal
-        title={t("scm-htpasswd-plugin.testForm.title")}
-        closeFunction={() => onClose()}
-        body={body}
-        footer={footer}
-        active={true}
-      />
-    );
-  }
-
-  renderTestResult = () => {
-    const { t } = this.props;
-    const { testResult } = this.state;
-
+  const renderTestResult = () => {
     if (!testResult) {
       return null;
     }
 
     const success = <Tag color="success" label="Success" />;
     const failure = <Tag color="danger" label="Failure" />;
-    const successOrFailure = (r: boolean) => (r ? success : failure);
+    const successOrFailure = (r?: boolean) => (r ? success : failure);
 
-    const testResultDetailRows = testResult.user ? (
-      <>
-        <tr>
-          <td>{t("scm-htpasswd-plugin.testForm.result.userValid")}</td>
-          <td>{successOrFailure(testResult.user && testResult.user.valid)}</td>
-        </tr>
-        <tr>
-          <td>{t("scm-htpasswd-plugin.testForm.result.userDetails")}</td>
-          <td>
-            <ul>
-              <li>
-                {t("scm-htpasswd-plugin.testForm.result.userDetailsName")}: {testResult.user.name}
-              </li>
-              <li>
-                {t("scm-htpasswd-plugin.testForm.result.userDetailsDisplayName")}: {testResult.user.displayName}
-              </li>
-
-              <li>
-                {t("scm-htpasswd-plugin.testForm.result.userDetailsMail")}:{" "}
-                {testResult?.user?.mailAddress
-                  ? testResult.user.mailAddress
-                  : t("scm-htpasswd-plugin.testForm.result.missingValidMail")}
-              </li>
-            </ul>
-          </td>
-        </tr>
-        <tr>
-          <td>{t("scm-htpasswd-plugin.testForm.result.groups")}</td>
-          <td>{testResult.groups.join(", ")}</td>
-        </tr>
-      </>
-    ) : (
-      <>
-        <tr>
-          <td>{t("scm-htpasswd-plugin.testForm.result.exception")}</td>
-          <td>{testResult.exception}</td>
-        </tr>
-      </>
-    );
     return (
       <>
         <hr />
         <Subtitle subtitle={t("scm-htpasswd-plugin.testForm.result.header")} />
         <table className="table">
-          <tr>
-            <td>{t("scm-htpasswd-plugin.testForm.result.configured")}</td>
-            <td>{successOrFailure(testResult.configured)}</td>
-          </tr>
-          <tr>
-            <td>{t("scm-htpasswd-plugin.testForm.result.userFound")}</td>
-            <td>{successOrFailure(testResult.userFound)}</td>
-          </tr>
-          <tr>
-            <td>{t("scm-htpasswd-plugin.testForm.result.userAuthenticated")}</td>
-            <td>{successOrFailure(testResult.userAuthenticated)}</td>
-          </tr>
-          {testResultDetailRows}
+          <tbody>
+            <tr>
+              <td>{t("scm-htpasswd-plugin.testForm.result.configured")}</td>
+              <td>{successOrFailure(testResult.configured)}</td>
+            </tr>
+            <tr>
+              <td>{t("scm-htpasswd-plugin.testForm.result.userFound")}</td>
+              <td>{successOrFailure(testResult.userFound)}</td>
+            </tr>
+            <tr>
+              <td>{t("scm-htpasswd-plugin.testForm.result.userAuthenticated")}</td>
+              <td>{successOrFailure(testResult.userAuthenticated)}</td>
+            </tr>
+            {testResult.user ? (
+              <>
+                <tr>
+                  <td>{t("scm-htpasswd-plugin.testForm.result.userValid")}</td>
+                  <td>{successOrFailure(testResult.user.valid)}</td>
+                </tr>
+                <tr>
+                  <td>{t("scm-htpasswd-plugin.testForm.result.userDetails")}</td>
+                  <td>
+                    <ul>
+                      <li>
+                        {t("scm-htpasswd-plugin.testForm.result.userDetailsName")}: {testResult.user.name}
+                      </li>
+                      <li>
+                        {t("scm-htpasswd-plugin.testForm.result.userDetailsDisplayName")}: {testResult.user.displayName}
+                      </li>
+                      <li>
+                        {t("scm-htpasswd-plugin.testForm.result.userDetailsMail")}:{" "}
+                        {testResult.user.mailAddress || t("scm-htpasswd-plugin.testForm.result.missingValidMail")}
+                      </li>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <td>{t("scm-htpasswd-plugin.testForm.result.groups")}</td>
+                  <td>{testResult.groups?.join(", ")}</td>
+                </tr>
+              </>
+            ) : (
+              <tr>
+                <td>{t("scm-htpasswd-plugin.testForm.result.exception")}</td>
+                <td>{testResult.exception}</td>
+              </tr>
+            )}
+          </tbody>
         </table>
       </>
     );
   };
 
-  usernameChanged = (value: string) => {
-    this.setState({
-      username: value
-    });
-  };
+  const valid = username !== "" && password !== "";
 
-  passwordChanged = (value: string) => {
-    this.setState({
-      password: value
-    });
-  };
+  const body = (
+    <>
+      <div className="columns">
+        <div className="column">
+          <InputField
+            name="username"
+            label={t("scm-htpasswd-plugin.testForm.username")}
+            value={username}
+            onReturnPressed={onTest}
+            onChange={setUsername}
+          />
+        </div>
+        <div className="column">
+          <InputField
+            name="password"
+            label={t("scm-htpasswd-plugin.testForm.password")}
+            value={password}
+            type="password"
+            onReturnPressed={onTest}
+            onChange={setPassword}
+          />
+        </div>
+      </div>
+      {renderTestResult()}
+    </>
+  );
 
-  onTest = () => {
-    apiClient
-      .post(this.props.testLink, {
-        username: this.state.username,
-        password: this.state.password,
-        config: this.props.config
-      })
-      .then(result => result.json())
-      .then(body =>
-        this.setState({
-          testResult: body
-        })
-      )
-      .catch(error =>
-        this.setState({
-          testResult: {
-            exception: error
-          }
-        })
-      );
-  };
-}
+  const footer = (
+    <>
+      <Button disabled={!valid} onClick={onTest} variant="primary">{t("scm-htpasswd-plugin.testForm.submit")}</Button>
+      <Button onClick={onClose}>{t("scm-htpasswd-plugin.testForm.abort")}</Button>
+    </>
+  );
 
-export default withTranslation("plugins")(TestConnectionDialog);
+  return (
+    <Modal
+      title={t("scm-htpasswd-plugin.testForm.title")}
+      closeFunction={onClose}
+      body={body}
+      footer={footer}
+      active={true}
+    />
+  );
+};
+
+export default TestConnectionDialog;

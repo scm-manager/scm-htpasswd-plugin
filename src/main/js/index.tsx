@@ -17,4 +17,4 @@
 import { ConfigurationBinder as cfgBinder } from "@scm-manager/ui-components";
 import HtpasswdConfiguration from "./HtpasswdConfiguration";
 
-cfgBinder.bindGlobal("/htpasswd", "scm-htpasswd-plugin.nav-link", "htpasswdConfig", HtpasswdConfiguration);
+cfgBinder.bindAdminSetting("/htpasswd", "scm-htpasswd-plugin.nav-link", "htpasswdConfig", HtpasswdConfiguration);
